@@ -1,32 +1,28 @@
-package main
+package lru
 
-func main() {
-
-}
-
-type LRUCache struct {
-	m map[int]*node
-	head *node
-	tail *node
+type Cache struct {
+	m        map[int]*node
+	head     *node
+	tail     *node
 	capacity int
 }
 type node struct {
 	prev *node
 	next *node
-	key int
-	val int
+	key  int
+	val  int
 }
 
-func Constructor(capacity int) LRUCache {
+func Constructor(capacity int) Cache {
 	head := Node(-1, -1)
 	tail := Node(-1, -1)
 	head.next = tail
 	tail.prev = head
-	return LRUCache{
-		m: map[int]*node{},
+	return Cache{
+		m:        map[int]*node{},
 		capacity: capacity,
-		head: head,
-		tail: tail,
+		head:     head,
+		tail:     tail,
 	}
 }
 
@@ -37,19 +33,19 @@ func Node(key, val int) *node {
 	}
 }
 
-func (n *node)removeFromList() {
+func (n *node) removeFromList() {
 	n.prev.next = n.next
 	n.next.prev = n.prev
 }
 
-func (n *node)insertAtHead(h *node) {
+func (n *node) insertAtHead(h *node) {
 	h.next.prev = n
 	n.next = h.next
 	h.next = n
 	n.prev = h
 }
 
-func (this *LRUCache) Get(key int) int {
+func (this *Cache) Get(key int) int {
 	n := this.m[key]
 	if n == nil {
 		return -1
@@ -59,14 +55,13 @@ func (this *LRUCache) Get(key int) int {
 	return n.val
 }
 
-func (this *LRUCache)removeLast() {
+func (this *Cache) removeLast() {
 	n := this.tail.prev
 	delete(this.m, n.key)
 	n.removeFromList()
 }
 
-
-func (this *LRUCache) Put(key int, value int)  {
+func (this *Cache) Put(key int, value int) {
 	if this.capacity == 0 {
 		return
 	}
@@ -86,7 +81,6 @@ func (this *LRUCache) Put(key int, value int)  {
 		this.removeLast()
 	}
 }
-
 
 /**
  * Your LRUCache object will be instantiated and called as such:
