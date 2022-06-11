@@ -1,10 +1,10 @@
 package value_ctx
 
 type Context interface {
-	Value(key interface{}) interface{}
+	Value(key any) any
 }
 
-func WithValue(c Context, key, value interface{}) Context {
+func WithValue(c Context, key, value any) Context {
 	if c == nil {
 		panic("context not nil")
 	}
@@ -20,10 +20,10 @@ func WithValue(c Context, key, value interface{}) Context {
 
 type ValueCtx struct {
 	Context
-	key, value interface{}
+	key, value any
 }
 
-func (c *ValueCtx) Value(key interface{}) interface{} {
+func (c *ValueCtx) Value(key any) any {
 	if key == c.key {
 		return c.value
 	}
